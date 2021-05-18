@@ -7,6 +7,6 @@ export interface User extends Document {
   readonly passwordHash: string;
   readonly roles: string[];
   readonly displayName: string;
-  readonly createdAt: Date;
-  readonly updatedAt: Date;
+  readonly createdAt: string;
+  readonly updatedAt: string;
 }

@@ -7,6 +7,6 @@ export const UsersSchema = new mongoose.Schema({
     passwordHash: String,
     displayName: String,
     roles: [String],
-    createdAt: Date,
-    updatedAt: Date
+    createdAt: String,
+    updatedAt: String
 });

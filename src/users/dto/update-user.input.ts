@@ -1,6 +1,10 @@
 import { BaseUserInput } from "./base-user.input";
 
-export class UpdateUserInput extends BaseUserInput {
+export class UpdateUserInput {
   id?: string;
-  updatedAt: Date;
+  email?: string;
+  username?: string;
+  displayName?: string;
+  roles?: string[];
+  updatedAt: string = new Date().toISOString();
 }

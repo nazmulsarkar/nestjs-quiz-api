@@ -1,5 +1,5 @@
 import { UsersService } from './users.service';
-import { CreateUserInput } from './dto/create-user.input';
+import { CreateAdminInput } from './dto/create-admin.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { FilterUserInput } from './dto/filter-user.input';
 import {
@@ -11,6 +11,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { User } from './interfaces/user.interface';
+import { BaseUserInput } from './dto/base-user.input';
 
 @Controller('/api/users')
 export class UsersController {
@@ -18,25 +20,25 @@ export class UsersController {
 
   @Post('/')
   async createUser(
-    @Body('createUserInput') createUserInput: CreateUserInput,
-  ): Promise<CreateUserInput> {
-    return this.usersService.create(createUserInput);
+    @Body('createUserInput') createInput: BaseUserInput,
+  ): Promise<User> {
+    return this.usersService.create(createInput);
   }
 
   @Get('/')
-  async users(): Promise<CreateUserInput[]> {
+  async users(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Post('/filtered')
   async userList(
     @Body('filters') filters: FilterUserInput,
-  ): Promise<CreateUserInput[]> {
+  ): Promise<User[]> {
     return this.usersService.list(filters);
   }
 
   @Post('/:id')
-  async findUser(@Param('id') id: string): Promise<CreateUserInput> {
+  async findUser(@Param('id') id: string): Promise<User> {
     return this.usersService.findOne(id);
   }
 
@@ -49,7 +51,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  async removeUser(@Param('id') id: string): Promise<CreateUserInput> {
+  async removeUser(@Param('id') id: string): Promise<User> {
     return this.usersService.remove(id);
   }
 }

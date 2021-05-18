@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateUserInput } from './dto/create-user.input';
 import { FilterUserInput } from './dto/filter-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { User } from './interfaces/user.interface';
@@ -10,40 +9,42 @@ import * as argon2 from 'argon2';
 @Injectable()
 export class UsersService {
     private logger = new Logger(UsersService.name);
+
     constructor(@InjectModel('User') private userModel: Model<User>) { }
-    async create(createUserInput: CreateUserInput): Promise<CreateUserInput> {
-        createUserInput.passwordHash = await this.getHash(createUserInput.password);
+
+    async create(createInput: any): Promise<User> {
+        createInput.passwordHash = await this.getHash(createInput.password);
         // clear  password as we don't persist passwords
-        createUserInput.password = undefined;
-        const createdUser = new this.userModel(createUserInput);
+        createInput.password = undefined;
+        const createdUser = new this.userModel(createInput);
         return await createdUser.save();
     }
 
-    async findAll(): Promise<CreateUserInput[]> {
+    async findAll(): Promise<User[]> {
         return await this.userModel.find().exec();
     }
 
-    async list(filters: FilterUserInput): Promise<CreateUserInput[]> {
+    async list(filters: FilterUserInput): Promise<User[]> {
         return this.userModel.find({ ...filters }).exec();
     }
 
-    async findOne(id: string): Promise<CreateUserInput> {
+    async findOne(id: string): Promise<User> {
         return await this.userModel.findOne({ _id: id });
     }
 
-    async findOneBy(filters: FilterUserInput): Promise<CreateUserInput> {
+    async findOneBy(filters: FilterUserInput): Promise<User> {
         return await this.userModel.findOne(filters).exec();
     }
 
-    async getUserByEmail(email: string): Promise<CreateUserInput> {
+    async getUserByEmail(email: string): Promise<User> {
         return (await this.userModel.find({ email }))[0];
     }
 
-    async update(id: string, updateUserInput: UpdateUserInput): Promise<UpdateUserInput> {
-        return await this.userModel.findByIdAndUpdate(id, updateUserInput, { new: true });
+    async update(id: string, updateInput: UpdateUserInput): Promise<User> {
+        return await this.userModel.findByIdAndUpdate(id, updateInput, { new: true });
     }
 
-    async remove(id: string): Promise<CreateUserInput> {
+    async remove(id: string): Promise<User> {
         return await this.userModel.findByIdAndRemove(id);
     }
 
