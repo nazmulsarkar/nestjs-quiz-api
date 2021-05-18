@@ -36,7 +36,7 @@ export class AuthController {
     async registerUser(@Response() res: any, @Body() body: User): Promise<any> {
         this.logger.log('register called');
         if (!(body && body.email && body.password)) {
-            return res.status(HttpStatus.FORBIDDEN).json({ message: 'Username and password are required!' });
+            return res.status(HttpStatus.FORBIDDEN).json({ message: 'Email and password are required!' });
         }
 
         let user;
@@ -47,7 +47,7 @@ export class AuthController {
         }
 
         if (user) {
-            return res.status(HttpStatus.FORBIDDEN).json({ message: 'Username already exists!' });
+            return res.status(HttpStatus.FORBIDDEN).json({ message: 'Email already exists!' });
         } else {
             user = await this.usersService.create(body);
             if (user) {
@@ -55,7 +55,7 @@ export class AuthController {
             }
         }
 
-        return res.status(HttpStatus.OK).json(await this.authService.createToken(user));
+        return res.status(HttpStatus.OK).json({ message: 'User created successfully!' });
     }
 
     @Post('me')
