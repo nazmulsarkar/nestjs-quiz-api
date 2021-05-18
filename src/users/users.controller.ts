@@ -2,15 +2,24 @@ import { UsersService } from './users.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { FilterUserInput } from './dto/filter-user.input';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Request, Response, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 
 @Controller('/api/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post('/')
-  async createUser(@Body('createUserInput') createUserInput: CreateUserInput): Promise<CreateUserInput> {
+  async createUser(
+    @Body('createUserInput') createUserInput: CreateUserInput,
+  ): Promise<CreateUserInput> {
     return this.usersService.create(createUserInput);
   }
 
@@ -20,7 +29,9 @@ export class UsersController {
   }
 
   @Post('/filtered')
-  async userList(@Body('filters') filters: FilterUserInput): Promise<CreateUserInput[]> {
+  async userList(
+    @Body('filters') filters: FilterUserInput,
+  ): Promise<CreateUserInput[]> {
     return this.usersService.list(filters);
   }
 
@@ -30,7 +41,10 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  async updateUser(@Param('id') id: string, @Body('updateUserInput') updateUserInput: UpdateUserInput): Promise<UpdateUserInput> {
+  async updateUser(
+    @Param('id') id: string,
+    @Body('updateUserInput') updateUserInput: UpdateUserInput,
+  ): Promise<UpdateUserInput> {
     return this.usersService.update(id, updateUserInput);
   }
 

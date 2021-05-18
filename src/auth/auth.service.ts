@@ -1,15 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserInput } from 'src/users/dto/create-user.input';
 import { UsersService } from '../users/users.service';
-import { SignupAuthInput } from './dto/siignup-auth.input';
-import { TokenAuthInput } from './dto/token-auth.input';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
-import * as jwt from 'jsonwebtoken';
-import { LoginAuthInput } from './dto/login-auth.input';
 
 @Injectable()
 export class AuthService {

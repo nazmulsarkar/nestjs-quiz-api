@@ -3,7 +3,6 @@ import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
 import { FilterQuestionInput } from './dto/filter-question.input';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { Question } from './interfaces/question.interface';
 import { AuthGuard } from '@nestjs/passport';
 // import { JwtAdminAuthGuard } from 'src/auth/guards/jwt-admin-auth.guard';
