@@ -2,10 +2,9 @@ import { QuestionsService } from './questions.service';
 import { CreateQuestionInput } from './dto/create-question.input';
 import { UpdateQuestionInput } from './dto/update-question.input';
 import { FilterQuestionInput } from './dto/filter-question.input';
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Question } from './interfaces/question.interface';
 import { AuthGuard } from '@nestjs/passport';
-// import { JwtAdminAuthGuard } from 'src/auth/guards/jwt-admin-auth.guard';
 
 @Controller('api/questions')
 export class QuestionsController {
@@ -13,8 +12,8 @@ export class QuestionsController {
 
   @Post('/')
   @UseGuards(AuthGuard('jwt'))
-  async createQuestion(@Body('createQuestionInput') createQuestionInput: CreateQuestionInput): Promise<CreateQuestionInput> {
-    return this.questionsService.create(createQuestionInput);
+  async createQuestion(@Body('title') title: string, @Body('description') description: string): Promise<CreateQuestionInput> {
+    return this.questionsService.create(title, description);
   }
 
   @Get('/')
@@ -25,14 +24,17 @@ export class QuestionsController {
 
   @Post('/filtered')
   @UseGuards(AuthGuard('jwt'))
-  async questionList(@Body('filters') filters?: FilterQuestionInput): Promise<Question[]> {
-    return this.questionsService.list(filters);
+  async questionList(@Res() res, @Body('filters') filters?: FilterQuestionInput, @Body('page') page?: number, @Body('limit') limit?: number): Promise<Question[]> {
+    const pageNumber = page || 1;
+    const sizeLimit = limit || 10;
+    const items = await this.questionsService.list(filters, pageNumber, sizeLimit);
+    return res.status(HttpStatus.OK).json({ questions: items, questionCount: items.length });
   }
 
   @Post('/:id')
   @UseGuards(AuthGuard('jwt'))
-  async findQuestion(@Param('id') id: string): Promise<Question> {
-    return this.questionsService.findOne(id);
+  async findQuestion(@Res() res, @Param('id') id: string): Promise<Question> {
+    return res.status(HttpStatus.OK).json(await this.questionsService.findOne(id));
   }
 
   @Patch('/:id')

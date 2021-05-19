@@ -9,8 +9,9 @@ import { Question } from './interfaces/question.interface';
 @Injectable()
 export class QuestionsService {
     constructor(@InjectModel('Question') private questionModel: Model<Question>) { }
-    async create(createQuestionInput: CreateQuestionInput): Promise<CreateQuestionInput> {
-        const createdQuestion = new this.questionModel(createQuestionInput);
+    async create(title: string, description: string): Promise<CreateQuestionInput> {
+        const question = { title, description, createdAt: new Date().toISOString() }
+        const createdQuestion = new this.questionModel(question);
         return await createdQuestion.save();
     }
 
@@ -18,8 +19,11 @@ export class QuestionsService {
         return await this.questionModel.find().exec();
     }
 
-    async list(filters: FilterQuestionInput): Promise<Question[]> {
-        return this.questionModel.find({ ...filters }).exec();
+    async list(filters: FilterQuestionInput, page: number, limit: number): Promise<any> {
+        return await this.questionModel.find({ ...filters })
+            .skip(Number(page))
+            .limit(Number(limit))
+            .exec();
     }
 
     async findOne(id: string): Promise<Question> {

@@ -23,11 +23,11 @@ export class AuthController {
         }
 
         const user = await this.usersService.getUserByEmail(body.email);
-        const { id, email, displayName, roles } = user;
+        const { _id, email, displayName, roles } = user;
 
         if (user) {
             if (await this.usersService.compareHash(body.password, user.passwordHash)) {
-                return res.status(HttpStatus.OK).json(await this.authService.createToken({ id, email, displayName, roles }));
+                return res.status(HttpStatus.OK).json(await this.authService.createToken({ id: _id, email, displayName, roles }));
             }
         }
 

@@ -20,7 +20,7 @@ import { AuthController } from './auth.controller';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '24h' },
       // privateKey: RSA_PRIVATE_KEY,
       // publicKey: RSA_PUBLIC_KEY
     }),
