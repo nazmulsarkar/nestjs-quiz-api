@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/corposit/quiz-api.tutspaper.com/
+    - /bin/cp -R /home/corposit/repositories/nestjs-quiz-api/ $DEPLOYPATH
